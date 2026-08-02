@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfumeria Camargo | Panel de Administración</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <div class="admin-shell">
+    <nav class="admin-nav">
+      <a href="index.html" class="ghost-button">&larr; Volver al Catálogo</a>
+    </nav>
+
+    <section class="admin-panel">
+      <p class="admin-panel__eyebrow">Maison Essence</p>
+      <h1 class="admin-panel__title">Agregar Perfume</h1>
+      <p class="admin-panel__subtitle">Herramienta de uso exclusivo para el equipo de inventario</p>
+
+      <form id="perfume-form" class="admin-form" novalidate>
+        <div class="form-field">
+          <label class="form-field__label" for="nombre">Nombre</label>
+          <input
+            class="form-field__input"
+            type="text"
+            id="nombre"
+            name="nombre"
+            placeholder="Ej. Bleu de Chanel"
+            autocomplete="off"
+            required
+          >
+          <span class="form-field__error" data-error-for="nombre"></span>
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="imagen_url">URL de la Imagen</label>
+          <input
+            class="form-field__input"
+            type="text"
+            id="imagen_url"
+            name="imagen_url"
+            placeholder="Ej. https://tucdn.com/perfumes/bleu-de-chanel.jpg"
+            autocomplete="off"
+          >
+          <span class="form-field__error" data-error-for="imagen_url"></span>
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="genero">Género</label>
+          <select class="form-field__input" id="genero" name="genero" required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option value="Hombre">Hombre</option>
+            <option value="Mujer">Mujer</option>
+            <option value="Unisex">Unisex</option>
+          </select>
+          <span class="form-field__error" data-error-for="genero"></span>
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="tipo">Tipo</label>
+          <select class="form-field__input" id="tipo" name="tipo" required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option value="Nicho">Nicho</option>
+            <option value="Diseñador">Diseñador</option>
+            <option value="Árabe">Árabe</option>
+          </select>
+          <span class="form-field__error" data-error-for="tipo"></span>
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="marca">Marca</label>
+          <select class="form-field__input" id="marca" name="marca" required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option value="Lattafa">Lattafa</option>
+            <option value="Armaf">Armaf</option>
+            <option value="French Avenue">French Avenue</option>
+            <option value="Giardini Di Toscana">Giardini Di Toscana</option>
+          </select>
+          <span class="form-field__error" data-error-for="marca"></span>
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="precio">Precio (BS)</label>
+          <input
+            class="form-field__input"
+            type="number"
+            id="precio"
+            name="precio"
+            placeholder="Ej. 120"
+            min="0"
+            step="0.01"
+            required
+          >
+          <span class="form-field__error" data-error-for="precio"></span>
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="stock">Stock</label>
+          <input
+            class="form-field__input"
+            type="number"
+            id="stock"
+            name="stock"
+            placeholder="Ej. 15"
+            min="0"
+            step="1"
+            required
+          >
+          <span class="form-field__error" data-error-for="stock"></span>
+        </div>
+
+        <button type="submit" class="admin-form__submit" id="submit-button">
+          Guardar Perfume
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

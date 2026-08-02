@@ -1,0 +1,277 @@
+/* ==========================================================================
+   Panel de Administración — Identidad visual
+   Reutiliza la paleta y tipografías del catálogo público.
+   ========================================================================== */
+:root {
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-ink: #1c1a17;
+  --color-ink-soft: #6b6459;
+  --color-accent: #a4835c;
+  --color-accent-dark: #7c6440;
+  --color-border: #e7e1d8;
+  --color-danger: #b3492f;
+  --color-success: #6f8f6a;
+
+  --font-display: "Cormorant Garamond", "Times New Roman", serif;
+  --font-body: "Jost", "Helvetica Neue", Arial, sans-serif;
+
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.75rem;
+  --space-lg: 3rem;
+
+  --radius: 2px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding: var(--space-lg) var(--space-sm);
+}
+
+/* ==========================================================================
+   Animaciones
+   ========================================================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ==========================================================================
+   Estructura
+   ========================================================================== */
+.admin-shell {
+  width: 100%;
+  max-width: 480px;
+  opacity: 0;
+  animation: fadeInUp 800ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+.admin-nav {
+  margin-bottom: var(--space-sm);
+}
+
+/* Botón fantasma — sutil, para no competir con la acción principal */
+.ghost-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.55rem 1rem;
+  transition: color 0.3s ease-out, border-color 0.3s ease-out, background-color 0.3s ease-out;
+}
+
+.ghost-button:hover {
+  color: var(--color-ink);
+  border-color: var(--color-accent);
+  background-color: rgba(164, 131, 92, 0.06);
+}
+
+.admin-panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-lg) var(--space-md);
+}
+
+.admin-panel__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-xs);
+}
+
+.admin-panel__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 2.1rem;
+  letter-spacing: 0.01em;
+  margin-bottom: var(--space-xs);
+}
+
+.admin-panel__subtitle {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-lg);
+}
+
+/* ==========================================================================
+   Formulario
+   ========================================================================== */
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-field__label {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+
+.form-field__input {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.8rem 0.95rem;
+  transition: border-color 0.35s ease-out, box-shadow 0.35s ease-out;
+}
+
+.form-field__input::placeholder {
+  color: #b7b0a3;
+}
+
+/* Micro-interacción: glow suave + borde acento al enfocar */
+.form-field__input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(164, 131, 92, 0.14);
+}
+
+.form-field__input.has-error {
+  border-color: var(--color-danger);
+}
+
+.form-field__error {
+  min-height: 1em;
+  font-size: 0.75rem;
+  color: var(--color-danger);
+}
+
+.admin-form__submit {
+  margin-top: var(--space-xs);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background-color: var(--color-ink);
+  color: var(--color-surface);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius);
+  padding: 0.95rem 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.35s ease-out, transform 0.2s ease-out, opacity 0.3s ease-out;
+}
+
+.admin-form__submit:hover:not(:disabled) {
+  background-color: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
+}
+
+.admin-form__submit:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.admin-form__submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Toast Notifications
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  top: var(--space-md);
+  right: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  z-index: 1000;
+}
+
+.toast {
+  min-width: 260px;
+  max-width: 340px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.1rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+  box-shadow: 0 20px 34px -16px rgba(28, 26, 23, 0.45);
+  opacity: 0;
+  transform: translateX(28px);
+  transition: opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1), transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast--success {
+  border-left-color: var(--color-success);
+}
+
+.toast--error {
+  border-left-color: var(--color-danger);
+}
+
+@media (max-width: 420px) {
+  .toast-container {
+    left: var(--space-sm);
+    right: var(--space-sm);
+  }
+
+  .toast {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+  }
+}

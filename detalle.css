@@ -1,0 +1,228 @@
+/* =========================================
+   ESTILOS DE LA PÁGINA DE DETALLE (PREMIUM)
+========================================== */
+
+body {
+  background-color: #FDFBF7; /* El tono crema elegante */
+  color: #1A1A1A;
+}
+
+.back-nav {
+  max-width: 1200px;
+  margin: 2rem auto 0;
+  padding: 0 2rem;
+}
+
+.btn-back {
+  background: none;
+  border: 1px solid #E5E5E5;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+/* --- CONTENEDOR PRINCIPAL: EL GRID A 2 COLUMNAS --- */
+.detalle-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Mitad y mitad */
+  gap: 4rem; /* Espacio entre columnas */
+}
+
+/* Columna Izquierda (Imagen pegajosa) */
+.detalle-galeria {
+  position: sticky;
+  top: 2rem; /* Se queda pegada al hacer scroll */
+  height: fit-content;
+}
+
+.imagen-principal-caja {
+  background-color: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagen-principal-caja img {
+  width: 100%;
+  max-width: 400px;
+  object-fit: contain;
+}
+
+/* Columna Derecha (Información) */
+.detalle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pildora-marca {
+  background-color: #F2ECE4;
+  color: #8C7558;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.titulo-perfume {
+  font-family: 'Times New Roman', serif; /* Tipografía Serif elegante */
+  font-size: 4rem;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.pildoras-categorias {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pildora {
+  background-color: #F0F0F0;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* --- CAJAS DE COMPRA --- */
+.caja-compra, .caja-extra {
+  background-color: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #EAEAEA;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.label-compra {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.sub-label {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0.2rem;
+  margin-bottom: 1rem;
+}
+
+.select-premium {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #DDD;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  margin-bottom: 1rem;
+  background-color: #FAFAFA;
+  cursor: pointer;
+}
+
+/* --- BOTONES --- */
+.btn-negro-full {
+  width: 100%;
+  background-color: #0A0A0A;
+  color: white;
+  border: none;
+  padding: 1.2rem;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-negro-full:hover {
+  transform: scale(1.02);
+}
+
+.btn-whatsapp {
+  width: 100%;
+  background-color: #25D366; /* Verde Oficial de WhatsApp */
+  color: white;
+  border: none;
+  padding: 1.2rem;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s;
+}
+
+.btn-whatsapp:hover {
+  background-color: #20b858;
+}
+
+.btn-outline-dorado {
+  width: 100%;
+  background-color: transparent;
+  color: #8C7558;
+  border: 1px solid #8C7558;
+  padding: 1.2rem;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-outline-dorado:hover {
+  background-color: #8C7558;
+  color: white;
+}
+
+/* --- LISTA DE DECANTS --- */
+.titulo-extra {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+.decant-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: #FDFBF7;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  border: 1px solid #F0ECE3;
+  font-weight: 500;
+  color: #8C7558;
+}
+
+/* Responsive para celulares */
+@media (max-width: 768px) {
+  .detalle-container {
+    grid-template-columns: 1fr; /* Una sola columna en móvil */
+    padding: 0 1rem 2rem;
+  }
+  .detalle-galeria {
+    position: static;
+  }
+  .titulo-perfume {
+    font-size: 2.5rem;
+  }
+}

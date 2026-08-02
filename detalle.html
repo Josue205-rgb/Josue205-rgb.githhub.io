@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Perfume - Perfumería</title>
+    
+    <!-- ¡AQUÍ ESTÁ EL HEAD! Y aquí es donde le ponemos "la ropa" llamando al CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Opcional: Fuente elegante parecida a la de Suárez -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Conexión a Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <!-- Botón Volver (Estilo Suárez) -->
+    <div class="contenedor-volver">
+        <a href="index.html" class="btn-volver">&larr; Volver al catálogo</a>
+    </div>
+    <!-- Contenedor principal que dividirá la pantalla en dos columnas -->
+    <div class="contenedor-principal-detalle" style="display: flex; max-width: 1200px; margin: 4rem auto; gap: 4rem; padding: 0 2rem;">
+        
+        <!-- ==========================================
+             COLUMNA IZQUIERDA: Imagen 
+             ========================================== -->
+        <div class="detalle-imagen-wrapper" style="flex: 1; background: #fcfcfc; border-radius: 20px; padding: 2rem; display: flex; justify-content: center; align-items: center;">
+            <img id="detalle-img" src="" alt="Imagen del perfume" style="max-width: 100%; height: auto; border-radius: 10px;">
+        </div>
+
+        <!-- ==========================================
+             COLUMNA DERECHA: Información (Lo que armamos)
+             ========================================== -->
+        <div class="detalle-info fade-in-up" style="flex: 1;">
+            
+            <!-- Marca y Título -->
+            <span class="detalle-marca" id="detalle-marca">Marca</span>
+            <h1 class="detalle-titulo" id="detalle-nombre">Cargando...</h1>
+            
+            <!-- Píldoras de categoría -->
+            <div class="detalle-badges">
+                <span class="badge" id="detalle-genero">Género</span>
+                <span class="badge" id="detalle-tipo">Tipo</span>
+            </div>
+
+            <!-- Selector de tamaño -->
+            <div class="detalle-seleccion">
+                <label class="label-principal">Elegí el tamaño para el carrito</label>
+                <span class="label-secundario">Presentación disponible</span>
+                <div class="select-wrapper">
+                    <select id="select-tamano" class="select-premium">
+                        <option value="completo">Perfume completo 100 ml - <span id="precio-select">0</span> Bs</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="detalle-botones">
+                <button class="btn-add-cart">Añadir al carrito</button>
+                <button class="btn-whatsapp" id="btn-comprar-wa">
+                    <!-- Icono de WhatsApp -->
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                    Pedir perfume directo
+                </button>
+                <button class="btn-combo">Arma Tu Combo</button>
+            </div>
+
+            <!-- Tarjeta de Precios y Decants -->
+            <div class="tarjeta-info-box">
+                <h4 class="tarjeta-titulo">Perfume completo</h4>
+                <div class="fila-precio">
+                    <span>100 ml</span>
+                    <strong id="detalle-precio-completo">0 Bs</strong>
+                </div>
+
+                <hr class="linea-separadora">
+
+                <h4 class="tarjeta-titulo">Decants</h4>
+                <div class="fila-precio"><span>5 ml</span><strong>50 Bs</strong></div>
+                <div class="fila-precio"><span>10 ml</span><strong>100 Bs</strong></div>
+                <div class="fila-precio"><span>15 ml</span><strong>140 Bs</strong></div>
+                <div class="fila-precio"><span>30 ml</span><strong>280 Bs</strong></div>
+            </div>
+
+            <!-- Tarjeta de Notas Olfativas -->
+            <div class="tarjeta-info-box">
+                <h3 class="tarjeta-titulo-principal">Notas del perfume</h3>
+                
+                <div class="grupo-notas">
+                    <h5>Notas de salida</h5>
+                    <div class="pildoras-notas salida">
+                        <span>Orquídea</span><span>Heliotropo</span><span>Mandarina</span>
+                    </div>
+                </div>
+
+                <div class="grupo-notas">
+                    <h5>Notas de corazón</h5>
+                    <div class="pildoras-notas corazon">
+                        <span>Acorde gourmand</span><span>Frutas tropicales</span>
+                    </div>
+                </div>
+
+                <div class="grupo-notas">
+                    <h5>Notas de fondo</h5>
+                    <div class="pildoras-notas fondo">
+                        <span>Vainilla</span><span>Almizcle</span><span>Sándalo</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ¡AQUÍ ESTÁ EL CEREBRO! Conectamos tu JavaScript al final del body -->
+    <script src="detalle.js"></script>
+
+</body>
+</html>

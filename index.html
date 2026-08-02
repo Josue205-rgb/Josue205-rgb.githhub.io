@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfumeria Camargo | Catálogo de Fragancias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Encabezado y Navegación Principal -->
+<header class="main-header">
+  <div class="logo-container">
+    <!-- Más adelante aquí pondremos tu logo oficial -->
+    <h1 class="logo-text">CAMARGO</h1> 
+  </div>
+  
+  <nav class="main-nav">
+    <ul class="nav-list">
+      <li class="nav-item"><a href="#" class="nav-link active">Perfumes</a></li>
+      <li class="nav-item"><a href="#" class="nav-link">Decants</a></li>
+      <li class="nav-item"><a href="#" class="nav-link">Combos y Sets</a></li>
+      <li class="nav-item"><a href="#" class="nav-link">Mystery Box</a></li>
+    </ul>
+  </nav>
+
+  <div class="header-actions">
+    <button class="cart-btn" aria-label="Ver carrito">
+      🛒 Carrito <span class="cart-count">0</span>
+    </button>
+  </div>
+</header>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <p class="site-header__eyebrow">Perfuneria Camargo</p>
+      <h1 class="site-header__title">Perfumes Sellados y Dicans </h1>
+      <p class="site-header__subtitle">Una selección exclusiva de perfumes, disponible en existencia</p>
+      <section class="filtros-premium">
+      
+      <div class="filtros-pildoras">
+        <div class="grupo-filtro">
+          <span class="etiqueta-filtro">Género</span>
+          <div class="pildoras-container" id="filtro-genero">
+            <button class="pildora active" data-value="todos">Todos</button>
+            <button class="pildora" data-value="Hombre">Hombre</button>
+            <button class="pildora" data-value="Mujer">Mujer</button>
+            <button class="pildora" data-value="Unisex">Unisex</button>
+          </div>
+        </div>
+        
+        <div class="grupo-filtro">
+          <span class="etiqueta-filtro">Tipo</span>
+          <div class="pildoras-container" id="filtro-tipo">
+            <button class="pildora active" data-value="todos">Todos</button>
+            <button class="pildora" data-value="Nicho">Nicho</button>
+            <button class="pildora" data-value="Diseñador">Diseñador</button>
+            <button class="pildora" data-value="Árabe">Árabe</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-busqueda">
+        <div class="panel-busqueda__fila1">
+          <div class="campo-busqueda">
+            <label for="input-buscar">Buscar perfumes</label>
+            <input type="text" id="input-buscar" placeholder="Introduce nombre, nota o marca" autocomplete="off">
+          </div>
+          
+          <div class="campo-select">
+            <label for="select-marca">Marca</label>
+            <select id="select-marca">
+              <option value="todos">Todas las marcas</option>
+              <option value="Lattafa">Lattafa</option>
+              <option value="Armaf">Armaf</option>
+              <option value="French Avenue">French Avenue</option>
+              <option value="Giardini Di Toscana">Giardini Di Toscana</option>
+            </select>
+          </div>
+          
+          <div class="campo-select">
+            <label for="select-orden">Orden</label>
+            <select id="select-orden">
+              <option value="hype">Más hypeado</option>
+              <option value="az">Alfabético A-Z</option>
+              <option value="za">Alfabético Z-A</option>
+              <option value="precio-menor">Precio (Menor a mayor)</option>
+              <option value="precio-mayor">Precio (Mayor a menor)</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="panel-busqueda__fila2">
+          <label class="checkbox-premium">
+            <input type="checkbox" id="check-stock" checked>
+            <span class="checkmark"></span>
+            Solo perfumes en stock
+          </label>
+          <label class="checkbox-premium">
+            <input type="checkbox" id="check-nuevos">
+            <span class="checkmark"></span>
+            Mostrar solo perfumes nuevos
+          </label>
+          <label class="checkbox-premium">
+            <input type="checkbox" id="check-ofertas">
+            <span class="checkmark"></span>
+            Solo ofertas
+          </label>
+        </div>
+      </div>
+      
+    </section>
+    </div>
+  </header>
+
+  <main class="catalog">
+    <section id="feedback-container" class="feedback" aria-live="polite"></section>
+
+    <section id="catalog-grid" class="catalog__grid">
+      <!-- Las tarjetas de perfumes se insertan dinámicamente aquí -->
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Perfuneria Camargo. Muchas gracias por visitarnos.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

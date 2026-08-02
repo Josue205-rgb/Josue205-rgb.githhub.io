@@ -1,0 +1,591 @@
+/* ==========================================================================
+   Reset & Base
+   ========================================================================== */
+:root {
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-ink: #1c1a17;
+  --color-ink-soft: #6b6459;
+  --color-accent: #a4835c;
+  --color-accent-dark: #7c6440;
+  --color-border: #e7e1d8;
+  --color-danger: #b3492f;
+
+  --font-display: "Cormorant Garamond", "Times New Roman", serif;
+  --font-body: "Jost", "Helvetica Neue", Arial, sans-serif;
+
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.75rem;
+  --space-lg: 3rem;
+  --space-xl: 5rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Header (Navegación Premium)
+   ========================================================================== */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 5%;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid #eeeeee;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #000;
+}
+
+.nav-list {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: #000;
+  font-weight: 600;
+}
+
+.cart-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.cart-btn:hover {
+  background-color: #333;
+}
+
+/* ==========================================================================
+   Banner del Catálogo
+   ========================================================================== */
+.site-header {
+  text-align: center;
+  padding: var(--space-xl) var(--space-sm) var(--space-lg);
+}
+
+.site-header__eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+}
+
+.site-header__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  color: var(--color-ink);
+}
+
+.site-header__subtitle {
+  margin-top: var(--space-sm);
+  font-weight: 300;
+  font-size: 0.95rem;
+  color: var(--color-ink-soft);
+}
+
+/* ==========================================================================
+   Layout y Grid
+   ========================================================================== */
+.catalog {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md);
+}
+
+.catalog__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2.5rem;
+}
+
+/* ==========================================================================
+   Tarjetas de Perfumes (Premium + Animación)
+   ========================================================================== */
+.perfume-card {
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  
+  /* Animación inicial oculta */
+  opacity: 0;
+  transform: translateY(32px);
+  transition: 
+    opacity 0.7s cubic-bezier(0.19, 1, 0.22, 1), 
+    transform 0.7s cubic-bezier(0.19, 1, 0.22, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+/* Estado visible (activado por JS) */
+.perfume-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Efecto Hover Premium */
+.perfume-card.is-visible:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+  border-color: #dcdcdc;
+}
+
+/* Estilos para cuando tengamos las fotos (Paso 2) */
+.perfume-card__image {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.perfume-card.is-visible:hover .perfume-card__image {
+  transform: scale(1.05);
+}
+
+.perfume-card__initial {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--color-accent-dark);
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.perfume-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.perfume-card__name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111;
+  margin: 1rem 0 0.5rem;
+}
+
+.perfume-card__stock {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.perfume-card__stock--low {
+  color: #c94c4c;
+  font-weight: 500;
+}
+
+.perfume-card__footer {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.5rem;
+}
+
+.perfume-card__price {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.perfume-card__button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+.perfume-card__button:hover {
+  background-color: #333;
+}
+
+/* ==========================================================================
+   Estados de Carga y Footer
+   ========================================================================== */
+.feedback {
+  text-align: center;
+  color: var(--color-ink-soft);
+  padding: 2rem;
+}
+
+.feedback__spinner {
+  width: 28px;
+  height: 28px;
+  margin: 0 auto;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.site-footer {
+  text-align: center;
+  padding: var(--space-lg);
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ==========================================================================
+   Responsivo (Móviles)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .nav-list {
+    display: none; /* Oculta menú en móviles por ahora */
+  }
+  
+  .catalog__grid {
+    grid-template-columns: 1fr 1fr; /* 2 columnas en celular */
+    gap: 1.5rem;
+  }
+  
+  .perfume-card__name {
+    font-size: 1.2rem;
+  }
+}
+.perfume-card__image {
+  width: 100%;
+  height: 220px; /* Mantiene todas las fotos del mismo tamaño */
+  object-fit: contain; /* Evita que el frasco se estire o se deforme */
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+/* Un pequeño zoom elegante a la foto cuando pasas el mouse */
+.perfume-card:hover .perfume-card__image {
+  transform: scale(1.05);
+}
+/* ==========================================================================
+   FILTROS PREMIUM (CATÁLOGO)
+   ========================================================================== */
+.filtros-premium {
+  max-width: 1200px;
+  margin: 0 auto 3rem auto;
+  padding: 0 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* --- Píldoras (Género y Tipo) --- */
+.filtros-pildoras {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.grupo-filtro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.etiqueta-filtro {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+.pildoras-container {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.pildora {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  color: #333;
+  padding: 0.6rem 1.5rem;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pildora:hover {
+  border-color: #000;
+}
+
+.pildora.active {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* --- Panel de Búsqueda Complejo --- */
+.panel-busqueda {
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.panel-busqueda__fila1 {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.campo-busqueda {
+  flex: 2; /* Ocupa más espacio */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.campo-select {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.panel-busqueda label {
+  font-size: 0.85rem;
+  color: #777;
+  font-weight: 500;
+}
+
+.panel-busqueda input[type="text"],
+.panel-busqueda select {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  background-color: #fafafa;
+  outline: none;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.panel-busqueda input[type="text"]:focus,
+.panel-busqueda select:focus {
+  border-color: #8C7558; /* Toque dorado al seleccionar */
+  background-color: #fff;
+}
+
+/* --- Checkboxes Customizados --- */
+.panel-busqueda__fila2 {
+  display: flex;
+  gap: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.checkbox-premium {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+  cursor: pointer;
+}
+
+.checkbox-premium input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #8C7558; /* Checkbox color dorado */
+}
+/* ==========================================================================
+   DISEÑO PREMIUM DE DETALLES Y ANIMACIONES
+   ========================================================================== */
+
+/* Animación de entrada suave (Transición de página) */
+.fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tipografía y Badges */
+.detalle-marca {
+  background-color: #f6efe9;
+  color: #8C7558;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.detalle-titulo {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif; /* O tu fuente elegante principal */
+}
+
+.detalle-badges {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.detalle-badges .badge {
+  background-color: #f5f5f5;
+  color: #555;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Selector de tamaño */
+.detalle-seleccion {
+  margin-bottom: 1.5rem;
+}
+.label-principal { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.label-secundario { display: block; font-size: 0.8rem; color: #777; margin-bottom: 0.8rem; }
+.select-premium {
+  width: 100%; padding: 1rem; border: 1px solid #e0e0e0; border-radius: 12px;
+  background-color: #fff; font-size: 1rem; font-weight: 500; outline: none;
+}
+
+/* Botones Premium */
+.detalle-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 2.5rem;
+}
+
+.btn-add-cart { background-color: #111; color: #fff; border: none; padding: 1.2rem; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+.btn-add-cart:hover { background-color: #333; }
+
+.btn-whatsapp { background-color: #25D366; color: #fff; border: none; padding: 1.2rem; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 0.5rem; transition: 0.3s; }
+.btn-whatsapp:hover { background-color: #1ebd5a; }
+
+.btn-combo { background-color: transparent; color: #8C7558; border: 1.5px solid #dccbb6; padding: 1.2rem; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+.btn-combo:hover { background-color: #fdfaf7; border-color: #8C7558; }
+
+/* Cajas de Información (Precios y Notas) */
+.tarjeta-info-box {
+  background-color: #fcfcfc;
+  border: 1px solid #f0f0f0;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tarjeta-titulo-principal { font-size: 1.2rem; margin-bottom: 1.5rem; color: #333; }
+.tarjeta-titulo { font-size: 0.9rem; color: #777; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+
+.fila-precio { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; background-color: #fff; border-radius: 12px; margin-bottom: 0.5rem; padding: 0.8rem 1rem; border: 1px solid #f0f0f0; }
+.fila-precio span { font-weight: 500; color: #555; }
+.fila-precio strong { font-weight: 600; font-size: 1.1rem; }
+.linea-separadora { border: none; border-top: 1px dashed #e0e0e0; margin: 1.5rem 0; }
+
+/* Píldoras de Notas Olfativas */
+.grupo-notas { margin-bottom: 1.5rem; }
+.grupo-notas h5 { font-size: 0.85rem; color: #666; margin-bottom: 0.5rem; }
+.pildoras-notas { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+/* Colores específicos de las píldoras según la referencia visual */
+.pildoras-notas.salida span { background-color: #fdf5f0; color: #c47b59; border: 1px solid #fbe6dc; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 500;}
+.pildoras-notas.corazon span { background-color: #fbf2f6; color: #b75982; border: 1px solid #f8e1ec; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 500;}
+.pildoras-notas.fondo span { background-color: #f5f3e9; color: #9c8446; border: 1px solid #efeadd; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 500;}
+/* Contenedor y Botón Volver al Catálogo (Estilo Suárez) */
+.contenedor-volver {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto 0 auto;
+  text-align: left; /* Lo alineamos a la izquierda para que se vea más natural */
+  padding-left: 2rem;
+}
+
+.btn-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  color: #555555;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.btn-volver:hover {
+  border-color: #d1d1d1;
+  color: #333333;
+  background-color: #fafafa;
+}
