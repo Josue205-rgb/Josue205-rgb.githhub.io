@@ -283,6 +283,20 @@ body {
   border-top: 1px solid var(--color-border);
 }
 
+.site-footer__extra {
+  margin-top: 0.5rem;
+}
+
+.site-footer__extra a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.site-footer__extra a:hover {
+  color: var(--color-ink);
+}
+
 /* ==========================================================================
    Responsivo (Móviles)
    ========================================================================== */
