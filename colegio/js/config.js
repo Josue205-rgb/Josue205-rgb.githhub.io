@@ -4,7 +4,7 @@
    "anon" o "publishable" de tu proyecto. Esas dos son públicas (viajan dentro de la página).
    NUNCA pongas aquí la clave "service_role" ni la contraseña de la base de datos. */
 window.SGE_CONFIG = {
-  supabaseUrl: '',   // p. ej. 'https://abcdefghijkl.supabase.co'
-  supabaseKey: '',   // p. ej. 'sb_publishable_…' o la clave anon 'eyJ…'
+  supabaseUrl: 'https://iwvqfbsjlajyfgozmjso.supabase.co',// p. ej. 'https://abcdefghijkl.supabase.co'
+  supabaseKey: 'sb_publishable_dlFTRemRGi-Iz7Tvt1TF9A_txcp2NXT',// p. ej. 'sb_publishable_…' o la clave anon 'eyJ…'
   colegio: 'Colegio Marcelino Champagnat II', // nombre que se muestra en la pantalla de entrada
 };
