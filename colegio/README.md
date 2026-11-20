@@ -1,7 +1,12 @@
 # Sistema de gestión escolar (SGE)
 
-Aplicación web completa para un colegio. Sin servidor ni instalación: abre `index.html`
-(o publícala con GitHub Pages en `/colegio/`). Los datos viven en el navegador (`localStorage`).
+Aplicación web completa para un colegio, publicada con GitHub Pages en `/colegio/`. Funciona de dos formas:
+
+- **Con Supabase** (para uso real): cada persona entra con correo y contraseña, los datos viven en la base de
+  datos del colegio y los permisos se aplican en el servidor. Configuración paso a paso en
+  [`supabase/GUIA.md`](supabase/GUIA.md).
+- **Modo demostración** (si `js/config.js` está vacío): se elige un rol sin contraseña y los datos viven solo
+  en ese navegador (`localStorage`).
 
 ## Qué incluye
 | Módulo | Qué hace |
@@ -19,10 +24,10 @@ Aplicación web completa para un colegio. Sin servidor ni instalación: abre `in
 
 Extras: paleta de comandos `Ctrl/⌘ + K`, modo oscuro, vista de tabla en cada gráfico, diseño para móvil.
 
-## Roles (demostración)
-Administración, Docente (solo sus grupos) y Acudiente (solo sus hijos). **Los permisos solo controlan la
-interfaz**: al correr todo en el navegador no son seguridad real. Para datos reales de menores hace falta un
-backend con autenticación y autorización en el servidor.
+## Roles
+Administración (todo), Docente (solo sus grupos; no ve pensiones) y Acudiente (solo sus hijos, solo lectura).
+Con Supabase estas reglas las impone la base de datos (RLS en `supabase/esquema.sql`). En el modo
+demostración solo controlan la interfaz y no son seguridad real.
 
 ## Reglas de negocio por defecto (editables en Ajustes)
 Escala 1,0–5,0 · aprobado desde 3,0 · 4 periodos · tareas 30 % / exámenes 50 % / participación 20 % ·
@@ -34,10 +39,18 @@ desempeño Superior ≥ 4,6, Alto ≥ 4,0, Básico ≥ 3,0, Bajo < 3,0 · asiste
 index.html  css/app.css
 js/logic.js    reglas puras (notas, riesgo, horarios, cartera)   ← con pruebas
 js/seed.js     datos de demostración deterministas
-js/store.js    persistencia   js/auth.js  sesión y permisos   js/ui.js  componentes y gráficos SVG
+js/store.js    persistencia (localStorage o Supabase)   js/auth.js  sesión y permisos   js/ui.js  componentes y gráficos SVG
+js/config.js   URL y clave pública de Supabase (vacío = demostración)
+js/nube.js     carga lo permitido y guarda solo lo que cambió   js/vendor/  supabase-js 2.49.4 (MIT)
+supabase/      esquema.sql (tablas + permisos) y GUIA.md
 js/views/*.js  una vista por módulo   js/app.js  enrutador, navegación, paleta
-tests/logic.test.js
+tests/  logic, nube (conversión y cambios) y rls (permisos contra PostgreSQL)
 ```
 
 ## Pruebas
-`node colegio/tests/logic.test.js` (desde la raíz del repositorio)
+Desde la raíz del repositorio:
+```
+node colegio/tests/logic.test.js
+node colegio/tests/nube.test.js
+SGE_PG="postgresql://…/base_vacia_de_prueba" node colegio/tests/rls.test.js   # permisos por rol
+```

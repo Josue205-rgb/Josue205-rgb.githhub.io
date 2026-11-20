@@ -267,3 +267,13 @@ input[type='checkbox'], input[type='radio'] { width: auto; accent-color: var(--b
   body.print-modal .modal { box-shadow: none; max-height: none; animation: none; }
   body.print-modal .modal-head, body.print-modal .modal-foot { display: none; }
 }
+
+/* Inicio de sesión con cuenta (Supabase) */
+.login-narrow { max-width: 460px; }
+.login-form { gap: 14px; }
+.login-field { display: flex; flex-direction: column; gap: 6px; font-size: .86rem; color: var(--on-pizarra2); }
+.login-field input { background: rgba(0, 0, 0, .25); border: 1px solid rgba(255, 255, 255, .2); color: #fff; border-radius: 10px; padding: 10px 12px; font: inherit; }
+.login-field input:focus { outline: 2px solid var(--chalk); outline-offset: 1px; }
+.login-msg { min-height: 1.2em; color: #ffd59a; font-size: .86rem; margin: 0; }
+.login-msg:empty { display: none; }
+.login-link { background: none; border: 0; color: var(--on-pizarra2); text-decoration: underline; cursor: pointer; font: inherit; font-size: .84rem; align-self: center; }

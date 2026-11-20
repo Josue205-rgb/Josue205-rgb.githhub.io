@@ -1,4 +1,4 @@
-/* Arranque: login por rol, estructura, enrutador y paleta de comandos. */
+/* Arranque: inicio de sesión (demo por rol o cuenta real en Supabase), estructura, enrutador y paleta de comandos. */
 (function () {
   'use strict';
   const SGE = window.SGE, { h, icon, clear } = SGE.ui, L = SGE.logic;
@@ -50,6 +50,92 @@
   }
   function entrar(rol, id) { SGE.auth.entrar(rol, id); location.hash = '#/panel'; arrancar(); }
 
+  /* ---------- login con Supabase ---------- */
+  const CFG = window.SGE_CONFIG || {};
+  // Enlaces de los correos de Supabase (invitación o recuperar contraseña): se leen antes de que la librería limpie la URL.
+  const enlaceCorreo = (/type=(recovery|invite)/.exec(location.hash) || [])[1] || null;
+  const MENSAJES = [
+    [/invalid login credentials/i, 'Correo o contraseña incorrectos.'],
+    [/email not confirmed/i, 'Tu correo aún no está confirmado. Revisa el mensaje que te llegó.'],
+    [/password should be at least|weak password/i, 'La contraseña es muy corta: usa al menos 8 caracteres.'],
+    [/rate limit|too many/i, 'Demasiados intentos. Espera un momento y vuelve a probar.'],
+    [/failed to fetch|network/i, 'No hay conexión con el servidor. Revisa tu internet.'],
+    [/row-level security|permission denied/i, 'No tienes permiso para ese cambio.'],
+  ];
+  const traducir = (m) => { m = String(m || ''); const t = MENSAJES.find(([re]) => re.test(m)); return t ? t[1] : m; };
+  SGE.traducirError = traducir;
+
+  function cajaLogin(titulo, lead, contenido) {
+    const nombre = CFG.colegio || 'Sistema de gestión escolar';
+    clear(root).appendChild(h('main', { class: 'login' }, h('div', { class: 'login-box login-narrow' },
+      h('div', { class: 'brand' }, h('div', { class: 'brand-mark' }, nombre.replace(/^Colegio\s+/i, '')[0] || 'S'), h('div', {}, h('b', {}, nombre), h('small', {}, 'Sistema de gestión escolar'))),
+      h('h1', {}, titulo), lead ? h('p', { class: 'login-lead' }, lead) : null, contenido)));
+  }
+  function campo(label, attrs) { const inp = h('input', attrs); return { inp, el: h('label', { class: 'login-field' }, h('span', {}, label), inp) }; }
+
+  function renderLoginNube(aviso) {
+    const email = campo('Correo', { type: 'email', autocomplete: 'username', required: true });
+    const clave = campo('Contraseña', { type: 'password', autocomplete: 'current-password', required: true });
+    const msg = h('p', { class: 'login-msg', role: 'alert' }, aviso || '');
+    const enviar = h('button', { type: 'submit', class: 'btn primary' }, 'Entrar');
+    const olvide = h('button', { type: 'button', class: 'login-link', onclick: async () => {
+      const e = email.inp.value.trim();
+      if (!e) { msg.textContent = 'Escribe tu correo y vuelve a tocar «Olvidé mi contraseña».'; email.inp.focus(); return; }
+      const { error } = await SGE.nube.cliente.auth.resetPasswordForEmail(e, { redirectTo: location.origin + location.pathname });
+      msg.textContent = error ? traducir(error.message) : 'Si ese correo tiene cuenta, te llegó un enlace para crear una contraseña nueva.';
+    } }, 'Olvidé mi contraseña');
+    const form = h('form', { class: 'role login-form', onsubmit: async (ev) => {
+      ev.preventDefault(); msg.textContent = ''; enviar.disabled = true; enviar.textContent = 'Entrando…';
+      const { error } = await SGE.nube.cliente.auth.signInWithPassword({ email: email.inp.value.trim(), password: clave.inp.value });
+      enviar.disabled = false; enviar.textContent = 'Entrar';
+      if (error) { msg.textContent = traducir(error.message); return; }
+      location.hash = '#/panel'; arrancar();
+    } }, email.el, clave.el, msg, enviar, olvide);
+    cajaLogin('Bienvenido', 'Entra con el correo que registró el colegio. Cada persona ve solo lo que le corresponde: administración, sus grupos o sus hijos.', h('div', {}, form,
+      h('p', { class: 'login-note' }, '¿No tienes cuenta? Pide a la secretaría del colegio que te invite con tu correo.')));
+    email.inp.focus();
+  }
+
+  function renderNuevaClave(tipo) {
+    const c1 = campo('Contraseña nueva', { type: 'password', autocomplete: 'new-password', minlength: 8, required: true });
+    const c2 = campo('Repítela', { type: 'password', autocomplete: 'new-password', minlength: 8, required: true });
+    const msg = h('p', { class: 'login-msg', role: 'alert' });
+    const form = h('form', { class: 'role login-form', onsubmit: async (ev) => {
+      ev.preventDefault();
+      if (c1.inp.value.length < 8) { msg.textContent = 'Usa al menos 8 caracteres.'; return; }
+      if (c1.inp.value !== c2.inp.value) { msg.textContent = 'Las dos contraseñas no coinciden.'; return; }
+      const { error } = await SGE.nube.cliente.auth.updateUser({ password: c1.inp.value });
+      if (error) { msg.textContent = traducir(error.message); return; }
+      SGE.ui.toast('Contraseña guardada.'); location.hash = '#/panel'; arrancar();
+    } }, c1.el, c2.el, msg, h('button', { type: 'submit', class: 'btn primary' }, 'Guardar contraseña'));
+    cajaLogin(tipo === 'invite' ? 'Crea tu contraseña' : 'Contraseña nueva', 'La usarás junto con tu correo para entrar al sistema.', form);
+    c1.inp.focus();
+  }
+
+  function renderMensaje(titulo, texto) {
+    cajaLogin(titulo, texto, h('div', { class: 'row' }, h('button', { type: 'button', class: 'btn primary', onclick: async () => { await SGE.auth.salir(); arrancar(); } }, 'Salir'),
+      h('button', { type: 'button', class: 'btn ghost', onclick: () => location.reload() }, 'Reintentar')));
+  }
+
+  async function arrancarNube() {
+    cajaLogin('Cargando…', 'Conectando con la base de datos del colegio.', null);
+    const sb = SGE.nube.cliente;
+    const { data: { session } } = await sb.auth.getSession();
+    if (session && (enlaceCorreo || pedirClave)) { pedirClave = false; const t = enlaceCorreo; history.replaceState(null, '', location.pathname); return renderNuevaClave(t); }
+    if (!session) return renderLoginNube();
+    const { data: perfil, error } = await sb.rpc('reclamar_perfil');
+    if (error) return renderMensaje('No se pudo abrir tu cuenta', traducir(error.message));
+    if (!perfil || !perfil.rol) return renderMensaje('Tu cuenta aún no está vinculada', `Entraste como ${session.user.email}, pero ese correo no aparece como administración, docente ni acudiente. Pide a la secretaría que lo registre tal cual en tu ficha y vuelve a intentarlo.`);
+    SGE.auth.desdePerfil({ ...perfil, email: session.user.email });
+    try { await SGE.store.iniciarNube(perfil.rol === 'admin'); }
+    catch (e) { return renderMensaje('No se pudieron cargar los datos', traducir(e.message)); }
+    if (!SGE.auth.me()) return renderMensaje('Tu ficha ya no existe', 'Tu cuenta estaba vinculada a una ficha de docente o acudiente que fue eliminada. Pide a la secretaría que la revise.');
+    if (!/^#\//.test(location.hash)) location.hash = '#/panel';
+    renderShell();
+    navegar();
+  }
+  let pedirClave = false;
+
   /* ---------- shell ---------- */
   function renderShell() {
     const me = SGE.auth.me(), db = SGE.store.db;
@@ -63,7 +149,7 @@
           h('div', { class: 'who' }, SGE.ui.avatar(me.nombre, 36), h('div', {}, h('b', {}, me.nombre), h('small', {}, me.sub))),
           h('div', { class: 'side-btns' },
             h('button', { type: 'button', 'aria-label': 'Cambiar tema', onclick: alternarTema }, icon('moon', 16), 'Tema'),
-            h('button', { type: 'button', onclick: () => { SGE.auth.salir(); location.hash = ''; arrancar(); } }, icon('logout', 16), 'Salir')))),
+            h('button', { type: 'button', onclick: async () => { await SGE.auth.salir(); location.hash = ''; arrancar(); } }, icon('logout', 16), 'Salir')))),
       h('div', { class: 'main-col' },
         h('header', { class: 'topbar' },
           h('button', { type: 'button', class: 'icon-btn burger', 'aria-label': 'Abrir menú', onclick: () => document.body.classList.toggle('nav-open') }, icon('menu', 22)),
@@ -82,7 +168,7 @@
   function navegar() {
     if (!SGE.auth.activa || !viewEl) return;
     const me = SGE.auth.me();
-    if (!me) { SGE.auth.salir(); return arrancar(); }
+    if (!me) { return Promise.resolve(SGE.auth.salir()).then(arrancar); }
     const r = ruta();
     const item = NAV.find((n) => n.id === r.id);
     if (!item || !item.roles.includes(me.rol) || !SGE.views[r.id]) { location.hash = '#/panel'; return; }
@@ -149,6 +235,8 @@
 
   /* ---------- arranque ---------- */
   function arrancar() {
+    viewEl = null;
+    if (SGE.store.enNube) return arrancarNube().catch((e) => { console.error(e); renderMensaje('Algo salió mal', traducir(e.message || e)); });
     SGE.store.iniciar();
     SGE.auth.cargar();
     if (!SGE.auth.activa || !SGE.auth.me()) { SGE.auth.salir(); viewEl = null; renderLogin(); return; }
@@ -156,5 +244,10 @@
     navegar();
   }
   window.addEventListener('hashchange', navegar);
+  if (SGE.store.enNube) {
+    SGE.nube.onError((errs) => SGE.ui.toast('No se guardó en la base de datos: ' + traducir(errs[0]) + ' Recarga la página para ver lo último guardado.', 'bad'));
+    SGE.nube.cliente.auth.onAuthStateChange((ev) => { if (ev === 'PASSWORD_RECOVERY' && !enlaceCorreo) { pedirClave = true; setTimeout(arrancar, 0); } });
+    window.addEventListener('beforeunload', (e) => { if (SGE.nube.ocupada) { e.preventDefault(); e.returnValue = ''; } });
+  }
   arrancar();
 })();

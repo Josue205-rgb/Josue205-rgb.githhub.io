@@ -1,6 +1,7 @@
-/* Sesión y permisos de DEMOSTRACIÓN.
-   Importante: todo corre en el navegador, así que estos permisos solo controlan qué muestra la interfaz.
-   No son seguridad real; un sistema en producción necesita servidor, contraseñas y autorización en el backend. */
+/* Sesión y permisos.
+   - Modo demostración (sin js/config.js): se elige un rol sin contraseña; los permisos solo controlan la interfaz.
+   - Modo Supabase: la sesión es una cuenta real (correo y contraseña) y la base de datos solo entrega lo que
+     esa cuenta puede ver (reglas RLS en supabase/esquema.sql). Aquí solo se decide qué pantallas mostrar. */
 (function () {
   'use strict';
   const SGE = (window.SGE = window.SGE || {});
@@ -8,9 +9,15 @@
   let ses = null;
 
   const auth = {
-    cargar() { try { ses = JSON.parse(localStorage.getItem(KEY)); } catch (e) { ses = null; } return ses; },
+    cargar() { if (SGE.store.enNube) return ses; try { ses = JSON.parse(localStorage.getItem(KEY)); } catch (e) { ses = null; } return ses; },
     entrar(rol, userId) { ses = { rol, userId: userId || null }; try { localStorage.setItem(KEY, JSON.stringify(ses)); } catch (e) { /* noop */ } },
-    salir() { ses = null; try { localStorage.removeItem(KEY); } catch (e) { /* noop */ } },
+    /** Modo Supabase: toma el rol del perfil vinculado a la cuenta. */
+    desdePerfil(p) { ses = { rol: p.rol, userId: p.docente_id || p.acudiente_id || null, email: p.email || null }; },
+    async salir() {
+      ses = null;
+      try { localStorage.removeItem(KEY); } catch (e) { /* noop */ }
+      if (SGE.store.enNube) { try { await SGE.store.listo(); } finally { await SGE.nube.cliente.auth.signOut(); } }
+    },
     get activa() { return ses; },
 
     /** Contexto del usuario actual (se recalcula cada vez: los datos pueden cambiar). */
