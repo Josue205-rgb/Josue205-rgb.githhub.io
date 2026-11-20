@@ -29,19 +29,32 @@
 
     const archivo = h('input', { type: 'file', accept: 'application/json,.json', class: 'sr-only', 'aria-label': 'Importar copia de seguridad', onchange: (e) => {
       const file = e.target.files[0]; if (!file) return;
-      file.text().then((t) => { try { SGE.store.importar(t); U.toast('Copia importada.'); SGE.auth.salir(); location.hash = ''; location.reload(); } catch (err) { U.toast('Archivo no válido: ' + err.message, 'bad'); } });
+      file.text().then(async (t) => {
+        try { await SGE.store.importar(t); } catch (err) { return U.toast('Archivo no válido: ' + err.message, 'bad'); }
+        await SGE.store.listo(); U.toast('Copia importada.');
+        if (!nube) await SGE.auth.salir();
+        location.hash = nube ? '#/panel' : ''; location.reload();
+      });
     } });
+    const nube = SGE.store.enNube;
     const kb = Math.round(SGE.store.bytes() / 1024);
+    // Recarga solo cuando todo quedó guardado (en la nube, subir puede tardar unos segundos).
+    const aplicar = async (accion, msg) => { U.toast('Guardando…'); await accion(); await SGE.store.listo(); U.toast(msg); location.hash = '#/panel'; location.reload(); };
+    const vacio = !db.estudiantes.length && !db.docentes.length;
     el.append(h('section', { class: 'card', style: { marginTop: '16px' } },
-      h('header', { class: 'card-head' }, h('div', {}, h('h2', {}, 'Datos y copia de seguridad'), h('p', {}, `Los datos viven en este navegador (${kb} KB). ${SGE.store.persistente ? '' : 'Atención: el navegador bloquea el almacenamiento, los cambios se perderán al cerrar.'}`))),
+      h('header', { class: 'card-head' }, h('div', {}, h('h2', {}, 'Datos y copia de seguridad'), h('p', {}, nube
+        ? 'Los datos viven en la base de datos del colegio (Supabase). Descarga una copia de vez en cuando como respaldo adicional.'
+        : `Los datos viven en este navegador (${kb} KB). ${SGE.store.persistente ? '' : 'Atención: el navegador bloquea el almacenamiento, los cambios se perderán al cerrar.'}`))),
       h('div', { class: 'row' },
         btn('Descargar copia (JSON)', 'ghost', () => U.descargar(`sge-copia-${L.isoHoy()}.json`, SGE.store.exportar(), 'application/json'), 'download'),
-        btn('Importar copia…', 'ghost', () => archivo.click(), 'upload'), archivo,
-        btn('Restaurar datos de demostración', 'ghost', async () => { if (await U.confirmar('Se reemplazarán TODOS los datos actuales por los de demostración.', { ok: 'Restaurar', danger: true })) { SGE.store.reiniciarDemo(); U.toast('Datos de demostración restaurados.'); location.hash = '#/panel'; location.reload(); } }, 'refresh'),
-        btn('Empezar desde cero', 'danger', async () => { if (await U.confirmar('Se borrarán estudiantes, docentes, notas, pagos y todo lo demás. Descarga una copia antes si la necesitas.', { ok: 'Borrar todo', danger: true, title: 'Empezar desde cero' })) { SGE.store.vaciar(); U.toast('Sistema vacío. Crea grupos y docentes para empezar.'); location.hash = '#/panel'; location.reload(); } }, 'trash'))));
+        btn(nube ? 'Importar copia a la base de datos…' : 'Importar copia…', 'ghost', () => archivo.click(), 'upload'), archivo,
+        !nube || vacio ? btn(nube ? 'Cargar datos de ejemplo' : 'Restaurar datos de demostración', 'ghost', async () => { if (await U.confirmar(nube ? 'Se llenará la base de datos con estudiantes, docentes y notas inventados, para probar. Puedes borrarlos luego con «Empezar desde cero».' : 'Se reemplazarán TODOS los datos actuales por los de demostración.', { ok: nube ? 'Cargar ejemplo' : 'Restaurar', danger: !nube })) aplicar(() => SGE.store.reiniciarDemo(), 'Datos de ejemplo cargados.'); }, 'refresh') : null,
+        btn('Empezar desde cero', 'danger', async () => { if (await U.confirmar(`Se borrarán estudiantes, docentes, notas, pagos y todo lo demás${nube ? ' de la base de datos, para todas las cuentas' : ''}. Descarga una copia antes si la necesitas.`, { ok: 'Borrar todo', danger: true, title: 'Empezar desde cero' })) aplicar(() => SGE.store.vaciar(), 'Sistema vacío. Crea grupos y docentes para empezar.'); }, 'trash'))));
 
     el.append(h('section', { class: 'card', style: { marginTop: '16px' } }, h('h2', {}, 'Acerca de este sistema'),
-      h('p', { class: 'muted', style: { marginTop: '6px' } }, 'Esta es una aplicación de demostración que corre 100% en el navegador, sin servidor. Los roles controlan lo que se muestra, pero no son seguridad real: para usarla con datos reales de menores hace falta un backend con autenticación, permisos en el servidor, copias automáticas y cumplimiento de la ley de protección de datos personales.')));
+      h('p', { class: 'muted', style: { marginTop: '6px' } }, nube
+        ? 'Cada persona entra con su correo y contraseña. La base de datos aplica los permisos: administración ve todo, cada docente solo sus grupos y cada acudiente solo a sus hijos. Las cuentas se crean desde el panel de Supabase (ver supabase/GUIA.md) y se vinculan por el correo registrado en la ficha del docente o del acudiente.'
+        : 'Esta es una aplicación de demostración que corre 100% en el navegador, sin servidor. Los roles controlan lo que se muestra, pero no son seguridad real. Para usarla con datos reales, configura Supabase siguiendo supabase/GUIA.md: así cada persona tiene su contraseña y la base de datos aplica los permisos.')));
   }
   SGE.views.ajustes = { render };
 })();
